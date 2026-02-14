@@ -571,61 +571,51 @@ export default function FashionHomePage() {
       </header>
 
       {/* Hero Slider */}
-      <section className="relative h-[50vh] md:h-[70vh] overflow-hidden">
+      <section className="relative py-16 md:py-24 bg-gradient-to-b from-secondary/30 to-background overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="absolute inset-0"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent z-10" />
-            <img
-              src={heroSlides[currentSlide]?.image}
-              alt={heroSlides[currentSlide]?.title}
-              className="w-full h-full object-cover"
-            />
-            
-            <div className="absolute inset-0 z-20 flex items-center">
-              <div className="container-custom">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-                  className="max-w-xl"
-                >
-                  {heroSlides[currentSlide]?.badge && (
-                    <Badge className="mb-4 bg-primary text-primary-foreground px-4 py-1 text-sm">
-                      {heroSlides[currentSlide].badge}
-                    </Badge>
-                  )}
-                  <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
-                    {heroSlides[currentSlide]?.title}
-                  </h1>
-                  <p className="text-base md:text-lg text-white/90 mb-6">
-                    {heroSlides[currentSlide]?.subtitle}
-                  </p>
-                  <div className="flex gap-4">
-                    <Button 
-                      size="lg"
-                      onClick={() => navigate(heroSlides[currentSlide]?.link || '/products')}
-                      className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                    >
-                      Shop Now <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                    <Button 
-                      size="lg" 
-                      variant="outline" 
-                      onClick={() => navigate('/products')}
-                      className="border-white text-white hover:bg-white/10"
-                    >
-                      View All
-                    </Button>
-                  </div>
-                </motion.div>
-              </div>
+            <div className="container-custom text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="max-w-3xl mx-auto"
+              >
+                {heroSlides[currentSlide]?.badge && (
+                  <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
+                    {heroSlides[currentSlide].badge}
+                  </Badge>
+                )}
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 leading-tight">
+                  {heroSlides[currentSlide]?.title}
+                </h1>
+                <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+                  {heroSlides[currentSlide]?.subtitle}
+                </p>
+                <div className="flex gap-4 justify-center">
+                  <Button 
+                    size="lg"
+                    onClick={() => navigate(heroSlides[currentSlide]?.link || '/products')}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8"
+                  >
+                    Shop Now <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    onClick={() => navigate('/products')}
+                    className="rounded-full px-8"
+                  >
+                    View All
+                  </Button>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -636,25 +626,25 @@ export default function FashionHomePage() {
             <Button
               variant="ghost"
               size="icon"
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-30 h-12 w-12 rounded-full bg-black/30 text-white hover:bg-black/50"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-30 h-10 w-10 rounded-full bg-muted text-foreground hover:bg-muted/80"
               onClick={prevSlide}
             >
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-5 w-5" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-30 h-12 w-12 rounded-full bg-black/30 text-white hover:bg-black/50"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-30 h-10 w-10 rounded-full bg-muted text-foreground hover:bg-muted/80"
               onClick={nextSlide}
             >
-              <ChevronRight className="h-6 w-6" />
+              <ChevronRight className="h-5 w-5" />
             </Button>
           </>
         )}
 
         {/* Dots */}
         {heroSlides.length > 1 && (
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+          <div className="flex justify-center gap-2 mt-8">
             {heroSlides.map((_: any, index: number) => (
               <button
                 key={index}
@@ -662,7 +652,7 @@ export default function FashionHomePage() {
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === currentSlide 
                     ? 'w-8 bg-primary' 
-                    : 'w-2 bg-white/50 hover:bg-white/80'
+                    : 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50'
                 }`}
               />
             ))}
