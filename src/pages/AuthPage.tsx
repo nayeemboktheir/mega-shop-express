@@ -112,12 +112,13 @@ const AuthPage = () => {
         
         const { error } = await signIn(loginEmail, formData.password);
         if (error) {
+        console.error('Login error:', error.message, error);
           if (error.message.includes('Invalid login credentials')) {
             toast.error('ভুল ইমেইল/ফোন অথবা পাসওয়ার্ড');
           } else if (error.message.includes('Email not confirmed')) {
             toast.error('আপনার ইমেইল যাচাই করুন');
           } else {
-            toast.error('লগইন ব্যর্থ হয়েছে');
+            toast.error(`লগইন ব্যর্থ: ${error.message}`);
           }
         } else {
           toast.success('সফলভাবে লগইন হয়েছে!');
