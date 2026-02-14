@@ -570,7 +570,44 @@ export default function FashionHomePage() {
         </AnimatePresence>
       </header>
 
-      {/* Hero section removed */}
+      {/* Hero Section - Text Only */}
+      <section className="py-20 md:py-32 bg-gradient-to-b from-secondary/30 to-background">
+        <div className="container-custom text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-3xl mx-auto"
+          >
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
+              New Collection 2026
+            </Badge>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight">
+              Elegance in Every <span className="text-primary">Thread</span>
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Discover our curated collection of premium sarees and three-piece sets — crafted for the modern woman.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Button 
+                size="lg"
+                onClick={() => navigate('/products')}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8"
+              >
+                Shop Now <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg"
+                onClick={() => navigate('/products')}
+                className="rounded-full px-8"
+              >
+                View Collection
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Features Bar */}
       <section className="py-6 bg-secondary/50 border-y border-border">
