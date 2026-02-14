@@ -570,43 +570,104 @@ export default function FashionHomePage() {
         </AnimatePresence>
       </header>
 
-      {/* Hero Section - Text Only */}
-      <section className="py-20 md:py-32 bg-gradient-to-b from-secondary/30 to-background">
-        <div className="container-custom text-center">
+      {/* Hero Slider */}
+      <section className="relative h-[50vh] md:h-[70vh] overflow-hidden">
+        <AnimatePresence mode="wait">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto"
+            key={currentSlide}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0"
           >
-            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-              New Collection 2026
-            </Badge>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight">
-              Elegance in Every <span className="text-primary">Thread</span>
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Discover our curated collection of premium sarees and three-piece sets — crafted for the modern woman.
-            </p>
-            <div className="flex gap-4 justify-center">
-              <Button 
-                size="lg"
-                onClick={() => navigate('/products')}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8"
-              >
-                Shop Now <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                onClick={() => navigate('/products')}
-                className="rounded-full px-8"
-              >
-                View Collection
-              </Button>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent z-10" />
+            <img
+              src={heroSlides[currentSlide]?.image}
+              alt={heroSlides[currentSlide]?.title}
+              className="w-full h-full object-cover"
+            />
+            
+            <div className="absolute inset-0 z-20 flex items-center">
+              <div className="container-custom">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="max-w-xl"
+                >
+                  {heroSlides[currentSlide]?.badge && (
+                    <Badge className="mb-4 bg-primary text-primary-foreground px-4 py-1 text-sm">
+                      {heroSlides[currentSlide].badge}
+                    </Badge>
+                  )}
+                  <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+                    {heroSlides[currentSlide]?.title}
+                  </h1>
+                  <p className="text-base md:text-lg text-white/90 mb-6">
+                    {heroSlides[currentSlide]?.subtitle}
+                  </p>
+                  <div className="flex gap-4">
+                    <Button 
+                      size="lg"
+                      onClick={() => navigate(heroSlides[currentSlide]?.link || '/products')}
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                    >
+                      Shop Now <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                    <Button 
+                      size="lg" 
+                      variant="outline" 
+                      onClick={() => navigate('/products')}
+                      className="border-white text-white hover:bg-white/10"
+                    >
+                      View All
+                    </Button>
+                  </div>
+                </motion.div>
+              </div>
             </div>
           </motion.div>
-        </div>
+        </AnimatePresence>
+
+        {/* Navigation Arrows */}
+        {heroSlides.length > 1 && (
+          <>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-30 h-12 w-12 rounded-full bg-black/30 text-white hover:bg-black/50"
+              onClick={prevSlide}
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-30 h-12 w-12 rounded-full bg-black/30 text-white hover:bg-black/50"
+              onClick={nextSlide}
+            >
+              <ChevronRight className="h-6 w-6" />
+            </Button>
+          </>
+        )}
+
+        {/* Dots */}
+        {heroSlides.length > 1 && (
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+            {heroSlides.map((_: any, index: number) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === currentSlide 
+                    ? 'w-8 bg-primary' 
+                    : 'w-2 bg-white/50 hover:bg-white/80'
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Features Bar */}
