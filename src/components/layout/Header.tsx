@@ -278,6 +278,14 @@ const Header = () => {
             </li>
             <li>
               <Link 
+                to="/wishlist" 
+                className="text-foreground hover:text-primary font-medium transition-colors"
+              >
+                Wishlist
+              </Link>
+            </li>
+            <li>
+              <Link 
                 to="/about" 
                 className="text-foreground hover:text-primary font-medium transition-colors"
               >
@@ -323,6 +331,15 @@ const Header = () => {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Products
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    to="/wishlist" 
+                    className="block py-2 text-foreground hover:text-primary font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Wishlist
                   </Link>
                 </li>
                 <li>
