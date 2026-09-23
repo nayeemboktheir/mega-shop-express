@@ -23,3 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 .codex
+.tools/
+migration/mega-shop-express_260923.backup
