@@ -1,9 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import heroSlide1 from '@/assets/hero-slide-1.jpg';
-import heroSlide2 from '@/assets/hero-slide-2.jpg';
-import heroSlide3 from '@/assets/hero-slide-3.jpg';
-import defaultLogo from '@/assets/site-logo.png';
+import Footer from '@/components/layout/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShoppingBag, Heart, User, LayoutDashboard, ChevronRight, ChevronLeft,
@@ -74,31 +70,7 @@ export default function FashionHomePage() {
   const cartCount = useAppSelector(selectCartCount);
   const wishlistItems = useAppSelector(selectWishlistItems);
 
-  // Site header settings (logo + name)
-  const { data: headerSettings } = useQuery({
-    queryKey: ['header-settings'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('admin_settings')
-        .select('key, value')
-        .in('key', ['site_name', 'site_logo', 'shop_logo_url']);
-
-      if (error) throw error;
-
-      const settingsMap: Record<string, string> = {};
-      data?.forEach(item => {
-        settingsMap[item.key] = item.value;
-      });
-
-      return settingsMap;
-    },
-    staleTime: 0,
-    refetchOnMount: 'always',
-    refetchOnWindowFocus: true,
-  });
-
-  const siteName = headerSettings?.site_name || 'Modessi';
-  const siteLogo = headerSettings?.site_logo || headerSettings?.shop_logo_url || defaultLogo;
+  const siteName = 'TRIMATRIK';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -237,32 +209,14 @@ export default function FashionHomePage() {
   const headerPromoEnabled = homeContent.header_promo?.enabled !== false;
 
   // Hero slides from home content, banners, or defaults
-  const defaultSlides = [
-    {
-      id: '1',
-      title: 'নতুন টু পিস কালেকশন',
-      subtitle: 'এক্সক্লুসিভ ডিজাইন, প্রিমিয়াম কোয়ালিটি - ৩০% পর্যন্ত ছাড়',
-      image: heroSlide1,
-      link: '/products?category=two-piece',
-      badge: '৩০% ছাড়'
-    },
-    {
-      id: '2',
-      title: 'থ্রি পিস স্পেশাল',
-      subtitle: 'প্রিমিয়াম ফেব্রিক, এলিগ্যান্ট ডিজাইন - নতুন আগমন',
-      image: heroSlide2,
-      link: '/products?category=three-piece',
-      badge: 'নতুন'
-    },
-    {
-      id: '3',
-      title: 'সামার কালেকশন ২০২৬',
-      subtitle: 'কমফোর্টেবল এবং স্টাইলিশ - গরমের জন্য পারফেক্ট',
-      image: heroSlide3,
-      link: '/products',
-      badge: 'ট্রেন্ডিং'
-    }
-  ];
+  const defaultSlides = [{
+    id: 'two-piece-campaign',
+    title: 'নতুন টু পিস কালেকশন',
+    subtitle: 'সফট এমব্রয়ডারি, সুন্দর কাট এবং প্রতিদিনের এলিগ্যান্স।',
+    image: '/images/trimatrik-two-piece-campaign.png',
+    link: '/products?category=two-piece',
+    badge: 'নতুন কালেকশন'
+  }];
 
   // Priority: home_page_content hero_slides > banners > defaultSlides
   const getHeroSlides = () => {
@@ -272,7 +226,7 @@ export default function FashionHomePage() {
         id: s.id || String(index),
         title: s.title || '',
         subtitle: s.subtitle || '',
-        image: s.image || defaultSlides[index]?.image || heroSlide1,
+        image: s.image || defaultSlides[0].image,
         link: s.link || '/products',
         badge: s.badge || ''
       }));
@@ -412,23 +366,9 @@ export default function FashionHomePage() {
             </Button>
 
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <img
-                src={siteLogo}
-                alt={siteName}
-                className="h-10 w-auto object-contain"
-                loading="eager"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  if (target.src !== defaultLogo) target.src = defaultLogo;
-                }}
-              />
-              {/* Only show text if logo is missing */}
-              {!siteLogo && (
-                <span className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
-                  {siteName}
-                </span>
-              )}
+            <Link to="/" className="flex items-center gap-2" aria-label="TRIMATRIK home">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-lg font-bold text-white">T</span>
+              <span className="text-xl font-bold tracking-wide text-foreground md:text-2xl">{siteName}</span>
             </Link>
 
             {/* Search Bar - Desktop */}
@@ -571,48 +511,47 @@ export default function FashionHomePage() {
       </header>
 
       {/* Hero Slider */}
-      <section className="relative py-16 md:py-24 bg-gradient-to-b from-secondary/30 to-background overflow-hidden">
+      <section className="relative overflow-hidden bg-stone-100">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
+            className="relative min-h-[440px] md:min-h-[520px]"
           >
-            <div className="container-custom text-center">
+            <img
+              src={heroSlides[currentSlide]?.image}
+              alt={heroSlides[currentSlide]?.title || 'TRIMATRIK fashion collection'}
+              className="absolute inset-0 h-full w-full object-cover object-[68%_center] md:object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent md:via-white/35" />
+            <div className="container-custom relative z-10 flex min-h-[440px] items-center md:min-h-[520px]">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
-                className="max-w-3xl mx-auto"
+                className="max-w-xl text-left"
               >
                 {heroSlides[currentSlide]?.badge && (
-                  <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
+                  <Badge className="mb-4 border-primary/20 bg-white/90 text-primary shadow-sm">
                     {heroSlides[currentSlide].badge}
                   </Badge>
                 )}
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 leading-tight">
+                <h1 className="mb-4 text-4xl font-bold leading-tight text-foreground md:text-5xl lg:text-6xl">
                   {heroSlides[currentSlide]?.title}
                 </h1>
-                <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+                <p className="mb-8 max-w-md text-base text-muted-foreground md:text-lg">
                   {heroSlides[currentSlide]?.subtitle}
                 </p>
-                <div className="flex gap-4 justify-center">
+                <div className="flex flex-wrap gap-3">
                   <Button 
                     size="lg"
                     onClick={() => navigate(heroSlides[currentSlide]?.link || '/products')}
                     className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-8"
                   >
                     Shop Now <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
-                    onClick={() => navigate('/products')}
-                    className="rounded-full px-8"
-                  >
-                    View All
                   </Button>
                 </div>
               </motion.div>
@@ -1069,55 +1008,6 @@ export default function FashionHomePage() {
         </div>
       </section>
 
-      {/* Promo Banner */}
-      <section className="py-12 md:py-16 bg-background">
-        <div className="container-custom">
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Banner 1 */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 p-8 md:p-10 cursor-pointer group"
-              onClick={() => navigate('/products?category=two-piece')}
-            >
-              <div className="relative z-10">
-                <Badge className="mb-3 bg-white/20 text-white border-0">সীমিত অফার</Badge>
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                  টু পিস কালেকশন
-                </h3>
-                <p className="text-white/90 mb-4">৩০% পর্যন্ত ছাড়</p>
-                <Button className="bg-white text-rose-600 hover:bg-white/90 rounded-full">
-                  এখনই কিনুন <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </div>
-              <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
-            </motion.div>
-
-            {/* Banner 2 */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-500 to-purple-500 p-8 md:p-10 cursor-pointer group"
-              onClick={() => navigate('/products?category=three-piece')}
-            >
-              <div className="relative z-10">
-                <Badge className="mb-3 bg-white/20 text-white border-0">নতুন আগমন</Badge>
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                  থ্রি পিস স্পেশাল
-                </h3>
-                <p className="text-white/90 mb-4">প্রিমিয়াম কোয়ালিটি</p>
-                <Button className="bg-white text-purple-600 hover:bg-white/90 rounded-full">
-                  এখনই কিনুন <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </div>
-              <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500" />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* New Arrivals */}
       <section className="py-12 md:py-16 bg-secondary/30">
         <div className="container-custom">
@@ -1236,8 +1126,8 @@ export default function FashionHomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#1a1a2e] text-white py-12 md:py-16">
+      {/* Replaced legacy template footer; retained in source temporarily for reference. */}
+      {false && <footer className="bg-[#1a1a2e] text-white py-12 md:py-16">
         <div className="container-custom">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             <div className="col-span-2 md:col-span-1">
@@ -1295,7 +1185,8 @@ export default function FashionHomePage() {
             <p>© {new Date().getFullYear()} এলিগ্যান্স। সর্বস্বত্ব সংরক্ষিত।</p>
           </div>
         </div>
-      </footer>
+      </footer>}
+      <Footer />
     </div>
   );
 }

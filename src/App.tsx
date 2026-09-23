@@ -27,6 +27,7 @@ import ProductLandingPage from '@/pages/ProductLandingPage';
 import LandingPage from '@/pages/LandingPage';
 import CottonTarselLandingPage from '@/pages/CottonTarselLandingPage';
 import DigitalTarselLandingPage from '@/pages/DigitalTarselLandingPage';
+import InfoPage from '@/pages/InfoPage';
 
 import AdminLayout from '@/components/admin/AdminLayout';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
@@ -77,6 +78,9 @@ const App = () => (
               <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/shipping-policy" element={<InfoPage />} />
+              <Route path="/return-policy" element={<InfoPage />} />
+              <Route path="/faq" element={<InfoPage />} />
               <Route path="/my-account" element={<MyAccountPage />} />
               <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
               <Route path="/auth" element={<AuthPage />} />

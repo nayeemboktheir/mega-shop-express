@@ -231,7 +231,7 @@ const ContactPage = () => {
 
                 {/* Facebook Button */}
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/messages/t/282687191604098/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 p-5 bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-2xl hover:shadow-xl hover:shadow-violet-500/20 transition-all hover:-translate-y-1"
@@ -246,7 +246,7 @@ const ContactPage = () => {
                 </a>
 
                 {/* Map or Address Card */}
-                <div className="bg-card rounded-2xl p-6 border border-border">
+                <a href="https://www.google.com/maps/search/?api=1&query=Mirpur-13%2C+Dhaka-1216%2C+Bangladesh" target="_blank" rel="noopener noreferrer" className="block bg-card rounded-2xl p-6 border border-border transition-colors hover:border-primary/40">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                       <MapPin className="w-5 h-5 text-primary" />
@@ -257,7 +257,7 @@ const ContactPage = () => {
                     Road-1, Mirpur-13, Dhaka-1216<br />
                     Dhaka, Bangladesh
                   </p>
-                </div>
+                </a>
               </motion.div>
 
               {/* Contact Form */}
