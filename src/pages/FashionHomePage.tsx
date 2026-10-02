@@ -70,7 +70,11 @@ export default function FashionHomePage() {
   const cartCount = useAppSelector(selectCartCount);
   const wishlistItems = useAppSelector(selectWishlistItems);
 
+  const [siteSettings, setSiteSettings] = useState<Record<string, string>>({});
+  const [logoFailed, setLogoFailed] = useState(false);
+
   const siteName = 'TRIMATRIK';
+  const siteLogo = siteSettings.site_logo || siteSettings.shop_logo_url || '';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,6 +90,20 @@ export default function FashionHomePage() {
             contentMap[item.section_key] = item.content;
           });
           setHomeContent(contentMap);
+        }
+
+        // Fetch logo settings (same keys as the main Header)
+        const { data: settingsData } = await supabase
+          .from('admin_settings')
+          .select('key, value')
+          .in('key', ['site_logo', 'shop_logo_url']);
+
+        if (settingsData) {
+          const settingsMap: Record<string, string> = {};
+          settingsData.forEach(item => {
+            settingsMap[item.key] = item.value;
+          });
+          setSiteSettings(settingsMap);
         }
 
         // Fetch banners
@@ -367,8 +385,19 @@ export default function FashionHomePage() {
 
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2" aria-label="TRIMATRIK home">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-lg font-bold text-white">T</span>
-              <span className="text-xl font-bold tracking-wide text-foreground md:text-2xl">{siteName}</span>
+              {siteLogo && !logoFailed ? (
+                <img
+                  src={siteLogo}
+                  alt={siteName}
+                  className="h-10 w-auto object-contain"
+                  onError={() => setLogoFailed(true)}
+                />
+              ) : (
+                <>
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-lg font-bold text-white">T</span>
+                  <span className="text-xl font-bold tracking-wide text-foreground md:text-2xl">{siteName}</span>
+                </>
+              )}
             </Link>
 
             {/* Search Bar - Desktop */}
