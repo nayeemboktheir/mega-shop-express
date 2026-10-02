@@ -252,24 +252,21 @@ const AdminHomePageEdit = () => {
   const saveContent = async () => {
     setIsSaving(true);
     try {
-      for (const [sectionKey, sectionContent] of Object.entries(content)) {
-        // First try update
-        const { error: updateError, count } = await supabase
-          .from('home_page_content')
-          .update({ content: sectionContent, updated_at: new Date().toISOString() })
-          .eq('section_key', sectionKey);
+      const rows = Object.entries(content).map(([sectionKey, sectionContent]) => ({
+        section_key: sectionKey,
+        content: sectionContent,
+        updated_at: new Date().toISOString()
+      }));
 
-        // If no rows updated, insert
-        if (updateError || count === 0) {
-          const { error: insertError } = await supabase
-            .from('home_page_content')
-            .upsert({ 
-              section_key: sectionKey, 
-              content: sectionContent,
-              updated_at: new Date().toISOString()
-            });
-          if (insertError) throw insertError;
-        }
+      // Insert missing sections and update existing ones in one call
+      const { data, error } = await supabase
+        .from('home_page_content')
+        .upsert(rows, { onConflict: 'section_key' })
+        .select('section_key');
+
+      if (error) throw error;
+      if ((data?.length ?? 0) < rows.length) {
+        throw new Error('Some sections were not saved (check admin permissions)');
       }
       toast.success('সব পরিবর্তন সেভ হয়েছে!');
     } catch (error) {
@@ -290,7 +287,8 @@ const AdminHomePageEdit = () => {
     );
   }
 
-  const ImageUploadField = ({ 
+  // Plain render function (not a component) so inputs keep focus across re-renders
+  const renderImageUploadField = ({ 
     label, 
     currentImage, 
     sectionKey, 
@@ -428,13 +426,7 @@ const AdminHomePageEdit = () => {
                       </Button>
                     </div>
                     
-                    <ImageUploadField
-                      label="স্লাইড ছবি"
-                      currentImage={slide.image || ''}
-                      sectionKey="hero_slides"
-                      imageField="image"
-                      slideIndex={index}
-                    />
+                    {renderImageUploadField({ label: 'স্লাইড ছবি', currentImage: slide.image || '', sectionKey: 'hero_slides', imageField: 'image', slideIndex: index })}
                     
                     <div className="grid gap-4 md:grid-cols-2">
                       <div className="space-y-2">
@@ -563,12 +555,7 @@ const AdminHomePageEdit = () => {
                   <CardTitle>ব্যানার ১</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <ImageUploadField
-                    label="ছবি"
-                    currentImage={content.promo_banners?.banner1?.image || ''}
-                    sectionKey="promo_banners"
-                    imageField="image"
-                  />
+                  {renderImageUploadField({ label: 'ছবি', currentImage: content.promo_banners?.banner1?.image || '', sectionKey: 'promo_banners', imageField: 'image' })}
                   <div className="space-y-2">
                     <Label>ট্যাগলাইন</Label>
                     <Input
@@ -605,12 +592,7 @@ const AdminHomePageEdit = () => {
                   <CardTitle>ব্যানার ২</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <ImageUploadField
-                    label="ছবি"
-                    currentImage={content.promo_banners?.banner2?.image || ''}
-                    sectionKey="promo_banners"
-                    imageField="image"
-                  />
+                  {renderImageUploadField({ label: 'ছবি', currentImage: content.promo_banners?.banner2?.image || '', sectionKey: 'promo_banners', imageField: 'image' })}
                   <div className="space-y-2">
                     <Label>ট্যাগলাইন</Label>
                     <Input

@@ -25,3 +25,6 @@ dist-ssr
 .codex
 .tools/
 migration/mega-shop-express_260923.backup
+
+# Archives
+*.zip
